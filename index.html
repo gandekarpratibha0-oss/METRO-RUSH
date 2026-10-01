@@ -60,33 +60,40 @@ for(let side of [-1,1])for(let i=0;i<14;i++){
   if(i%3===0){box(g,.7,.8,.8,darkMetal,x+.35,h+.4,0);box(g,.14,1.4,.14,railMat,x-.7,h+.7,0)}
 }
 // Overhead power gantries and street lamps add scale cues.
-const gantries=[];for(let i=0;i<8;i++){const z=-14-i*18,g=new THREE.Group();g.position.z=z;scene.add(g);for(const x of [-4.45,4.45])box(g,.13,6,.13,darkMetal,x,3,0);box(g,9,.16,.16,darkMetal,0,5.8,0);box(g,.08,1.2,.08,railMat,0,5.15,0);gantries.push(g)}
+const gantries=[];for(let i=0;i<8;i++){const z=-14-i*18,g=new THREE.Group();g.position.z=z;scene.add(g);for(const x of [-4.45,4.45])box(g,.13,6,.13,darkMetal,x,3,0);box(g,9,.16,.16,darkMetal,0,5.8,0);gantries.push(g)}
 const lamps=[];for(let i=0;i<9;i++)for(const side of [-1,1]){const z=-8-i*15,g=new THREE.Group();g.position.z=z;scene.add(g);box(g,.12,4.6,.12,darkMetal,side*5.2,2.3,0);box(g,1,.12,.12,darkMetal,side*4.75,4.55,0);const bulb=new THREE.Mesh(new THREE.SphereGeometry(.15,12,10),new THREE.MeshBasicMaterial({color:0xffedb5}));bulb.position.set(side*4.3,4.45,0);g.add(bulb);lamps.push(g)}
 
 // Procedural detailed runner: layered clothing, face, hair, backpack, hands and shoes.
 const runner=new THREE.Group();runner.position.set(0,0,0);scene.add(runner);
 runner.rotation.y=Math.PI;
-const skin=mat(0xc98e68,.8),hoodie=mat(0x087f8c,.72),hoodieDark=mat(0x075d68,.78),pants=mat(0x25354b,.88),shoe=mat(0xe7e9e8,.48),sole=mat(0x29303a,.7),hair=mat(0x211b1a,.95),accent=mat(0xf27c42,.55),bag=mat(0x172b3d,.85);
+const skin=mat(0xb97958,.88),hoodie=mat(0x087f8c,.86),hoodieDark=mat(0x075d68,.9),pants=mat(0x25354b,.94),shoe=mat(0xdce3e5,.58),sole=mat(0x202831,.82),hair=mat(0x211b1a,.98),accent=mat(0xe77b43,.72),bag=mat(0x172b3d,.94),fabricLight=mat(0x1597a0,.92),stitch=mat(0x51b4b2,.9);
 const torso=new THREE.Group();torso.position.y=1.16;runner.add(torso);
-const chest=new THREE.Mesh(new THREE.CapsuleGeometry(.36,.48,6,12),hoodie);chest.scale.set(1,1.05,.72);chest.castShadow=true;torso.add(chest);
+const chest=new THREE.Mesh(new THREE.CapsuleGeometry(.35,.45,7,16),hoodie);chest.scale.set(1,.98,.78);chest.castShadow=true;torso.add(chest);
 const jacketZip=box(torso,.025,.62,.018,mat(0x8bd1ce,.55),0,.04,.264,false);
 const collar=new THREE.Mesh(new THREE.TorusGeometry(.19,.055,8,18),hoodieDark);collar.rotation.x=Math.PI/2;collar.position.y=.38;torso.add(collar);
+const hood=new THREE.Mesh(new THREE.CapsuleGeometry(.22,.15,4,12),hoodieDark);hood.scale.set(1,.72,.72);hood.position.set(0,.34,-.205);torso.add(hood);
+const jacketHem=new THREE.Mesh(new THREE.TorusGeometry(.265,.028,8,24),hoodieDark);jacketHem.rotation.x=Math.PI/2;jacketHem.scale.set(1,1,.78);jacketHem.position.y=-.31;torso.add(jacketHem);
+for(const side of [-1,1]){const panel=box(torso,.018,.48,.012,stitch,side*.285,-.015,-.254,false);panel.rotation.z=side*-.04}
 const neck=new THREE.Mesh(new THREE.CylinderGeometry(.11,.13,.22,12),skin);neck.position.y=.53;torso.add(neck);
 const head=new THREE.Group();head.position.set(0,.79,0);torso.add(head);
 const face=new THREE.Mesh(new THREE.SphereGeometry(.255,20,16),skin);face.scale.set(.86,1.08,.86);face.castShadow=true;head.add(face);
 const hairCap=new THREE.Mesh(new THREE.SphereGeometry(.263,20,12,0,Math.PI*2,0,Math.PI*.55),hair);hairCap.position.y=.075;head.add(hairCap);
+const hairBack=new THREE.Mesh(new THREE.SphereGeometry(.235,18,14),hair);hairBack.scale.set(1,.82,.72);hairBack.position.set(0,-.075,-.045);head.add(hairBack);
 const fringe=new THREE.Mesh(new THREE.SphereGeometry(.13,14,9),hair);fringe.scale.set(1.5,.55,.8);fringe.position.set(0,.12,.19);head.add(fringe);
+for(const side of [-1,1]){const ear=new THREE.Mesh(new THREE.SphereGeometry(.064,12,10),skin);ear.scale.set(.72,1,.65);ear.position.set(side*.218,-.015,0);head.add(ear)}
 for(const ex of [-.09,.09]){const eye=new THREE.Mesh(new THREE.SphereGeometry(.022,8,8),mat(0x171717,.3));eye.position.set(ex,-.005,.218);head.add(eye)}
-const backpack=box(torso,.43,.58,.2,bag,0,-.03,-.28);backpack.rotation.x=-.08;
-for(const side of [-1,1]){const strap=box(torso,.075,.56,.045,accent,side*.245,.02,.13);strap.rotation.z=side*-.1}
+const backpack=new THREE.Mesh(new THREE.CapsuleGeometry(.23,.28,5,14),bag);backpack.scale.set(1.02,1,.63);backpack.position.set(0,-.025,-.32);backpack.castShadow=true;torso.add(backpack);
+const packFlap=box(torso,.34,.15,.045,hoodieDark,0,.215,-.455);const packPocket=box(torso,.30,.19,.055,bag,0,-.16,-.455);
+for(const side of [-1,1]){const strap=box(torso,.062,.57,.055,accent,side*.235,.015,-.405);strap.rotation.z=side*-.08;const buckle=box(torso,.075,.075,.06,darkMetal,side*.235,-.11,-.44)}
+box(torso,.035,.07,.025,accent,0,.19,-.487,false);
 function limb(parent,upperLen,lowerLen,radius,material,side,isArm){
   const pivot=new THREE.Group();pivot.position.set(side*(isArm?.31:.17),isArm?.31:.72,0);parent.add(pivot);
   const upper=new THREE.Mesh(new THREE.CapsuleGeometry(radius,upperLen*.72,5,10),material);upper.position.y=-upperLen*.35;upper.castShadow=true;pivot.add(upper);
   const joint=new THREE.Group();joint.position.y=-upperLen*.72;pivot.add(joint);
   const lower=new THREE.Mesh(new THREE.CapsuleGeometry(radius*.78,lowerLen*.72,5,10),material);lower.position.y=-lowerLen*.36;lower.castShadow=true;joint.add(lower);
   let end;
-  if(isArm){end=new THREE.Mesh(new THREE.SphereGeometry(radius*.8,12,10),skin);end.position.y=-lowerLen*.78;joint.add(end)}
-  else {const foot=new THREE.Group();foot.position.set(0,-lowerLen*.78,.095);joint.add(foot);const f=new THREE.Mesh(new THREE.BoxGeometry(.24,.14,.42),shoe);f.position.z=.08;f.castShadow=true;foot.add(f);const s=new THREE.Mesh(new THREE.BoxGeometry(.245,.05,.43),sole);s.position.set(0,-.075,.08);foot.add(s);end=foot}
+  if(isArm){const cuff=new THREE.Mesh(new THREE.CylinderGeometry(radius*.83,radius*.88,.10,12),hoodieDark);cuff.position.y=-upperLen*.72+.02;joint.add(cuff);end=new THREE.Mesh(new THREE.SphereGeometry(radius*.8,14,12),skin);end.position.y=-lowerLen*.78;joint.add(end)}
+  else {const foot=new THREE.Group();foot.position.set(0,-lowerLen*.78,.095);joint.add(foot);const f=new THREE.Mesh(new THREE.BoxGeometry(.23,.13,.36),shoe);f.position.z=.055;f.castShadow=true;foot.add(f);const toe=new THREE.Mesh(new THREE.SphereGeometry(.112,14,10),shoe);toe.scale.set(1,.58,1.3);toe.position.set(0,-.005,.205);foot.add(toe);const s=new THREE.Mesh(new THREE.BoxGeometry(.24,.045,.4),sole);s.position.set(0,-.073,.075);foot.add(s);const heel=new THREE.Mesh(new THREE.BoxGeometry(.15,.08,.14),sole);heel.position.set(0,-.025,-.09);foot.add(heel);end=foot}
   return {pivot,joint,end};
 }
 const arms=[limb(torso,.45,.4,.105,hoodie,-1,true),limb(torso,.45,.4,.105,hoodie,1,true)];
