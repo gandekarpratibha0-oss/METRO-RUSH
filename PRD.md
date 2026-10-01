@@ -1,14 +1,14 @@
-# Metro Dash — Product Requirements Document
+# Metro Rush — Product Requirements Document
 
 **दस्तऐवज स्थिती:** CEO demo साठी प्रस्तावित PRD  
 **आवृत्ती:** 1.0  
 **दिनांक:** 1 ऑक्टोबर 2026  
 **लक्ष्य demo:** 2 ऑक्टोबर 2026  
-**उत्पादन:** Metro Dash — तीन-lane endless runner browser game
+**उत्पादन:** Metro Rush — तीन-lane endless runner browser game
 
 ## 1. सारांश
 
-Metro Dash हा endless-runner शैलीतला, स्वतःची ओळख असलेला 3D browser game आहे. खेळाडू धावत्या रेल्वेमार्गावर तीन lanes मध्ये हालचाल करतो, येणाऱ्या trains व इतर अडथळ्यांना चुकवतो, coin rows गोळा करतो आणि शक्य तितका जास्त score मिळवतो. Game चे नाव, character design आणि artwork स्वतंत्र ठेवले जातात.
+Metro Rush हा Subway Surfers प्रकारच्या endless-runner gameplay ने प्रेरित, स्वतःची पात्रे आणि artwork असलेला 3D browser game आहे. खेळाडू धावत्या रेल्वेमार्गावर तीन lanes मध्ये हालचाल करतो, येणाऱ्या trains व इतर अडथळ्यांना चुकवतो, coin rows गोळा करतो आणि शक्य तितका जास्त score मिळवतो.
 
 CEO demo साठी उद्दिष्ट म्हणजे एका browser link वर उघडणारा, सुरुवातीपासून game-over पर्यंत पूर्ण खेळता येणारा vertical slice दाखवणे. हा demo उत्पादनाच्या संपूर्ण व्यावसायिक आवृत्तीचा पर्याय नाही. त्यातून gameplay, visual direction आणि पुढील विकासासाठीची दिशा तपासता येईल.
 
@@ -176,6 +176,7 @@ CEO game loop समजून controls वापरून पाहू शकत
 - 3D scene, trackside शहर, lighting/shadows आणि धावणारा animated character.
 - Keyboard, swipe आणि on-screen controls.
 - Smooth lane change, jump, slide, train/crate/barrier obstacles, coin rows आणि score.
+- Magnet coins जवळ ओढतो; jetpack काही सेकंद runner ला obstacles वरून उडवतो.
 - Start, game-over, restart आणि browser मध्ये सर्वोत्तम score जतन करणे.
 - दुसऱ्या device वर trusted local network द्वारे demo चालवण्याची ऐच्छिक पद्धत `README.md` मध्ये दिली आहे.
 
