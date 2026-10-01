@@ -11,6 +11,7 @@
 .boost-status.active{color:#d9f99d;border-color:#a3e63566;background:#84cc1618;box-shadow:0 0 20px #84cc1622}
 .best-value{color:#bae6fd}
 @media(max-width:390px){.boost-status{margin:6px 0 1px;padding:6px}.top{gap:5px}.brand{gap:6px}.scorebox{min-width:45px;padding:5px 4px}.score{font-size:15px}.score-label{font-size:7px;letter-spacing:.5px}}
+@media(pointer:coarse),(max-width:600px){.buttons{display:none}}
 </style>
 </head>
 <body>
@@ -18,7 +19,7 @@
   <div class="top"><div class="brand"><div class="logo">🚇</div><div><div class="title">METRO RUSH</div><div class="tagline">ENDLESS RUNNER</div></div></div><div class="hud"><div class="scorebox"><div class="score-label">स्कोअर</div><div class="score"><span id="score">0</span></div></div><div class="scorebox coinbox" id="coinbox"><div class="score-label">🪙 COINS</div><div class="score coin-value"><span id="coins">0</span></div></div><div class="scorebox"><div class="score-label">BEST</div><div class="score best-value"><span id="best">0</span></div></div></div></div>
   <canvas id="game" width="480" height="720" aria-label="Metro Rush 3D endless runner game"></canvas>
   <div class="help">← → lane · ↑ / Space उडी · ↓ slide · मोबाईलवर swipe</div>
-  <div class="boost-status" id="boostStatus">🧲 MAGNET · 🚀 JETPACK — मार्गात मिळवा</div>
+  <div class="boost-status" id="boostStatus">🧲 MAGNET · 👟 JUMP SHOES · 🚀 ROCKET</div>
   <div class="buttons"><button data-action="left">←</button><button data-action="jump">↑ &nbsp; उडी</button><button data-action="slide">↓ &nbsp; Slide</button><button data-action="right">→</button></div>
 </main>
 <div class="overlay" id="overlay"><div class="card"><div style="font-size:42px;margin-bottom:8px">🚇</div><h1 id="message">Metro Rush</h1><p id="sub">तीन tracks वर धावा, trains चुकवा, नाणी गोळा करा आणि power-ups वापरा!</p><button id="start">खेळ सुरू करा &nbsp; →</button></div></div>
@@ -103,7 +104,7 @@ const worldObjects=[],crateWood=mat(0xb76532,.84),crateBoard=mat(0xd1874a,.85),b
 function crate(x,z){const g=new THREE.Group();g.position.set(x,.0,z);scene.add(g);box(g,1.35,.9,1.05,crateWood,0,.48,0);for(let y=.12;y<.9;y+=.22)box(g,1.38,.035,1.08,crateBoard,0,y,0);for(let xx of [-.45,.45])box(g,.11,.92,1.12,darkMetal,xx,.49,0);return g}
 function barrier(x,z){const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);for(let xx of [-.53,.53])box(g,.13,2.25,.15,darkMetal,xx,1.12,0);box(g,1.32,.48,.2,barrierAmber,0,1.68,0);for(let xx of [-.4,-.05,.3]){const stripe=box(g,.13,.49,.22,barrierStripe,xx,1.68,.015);stripe.rotation.z=-.25}return g}
 function coin(x,z){const g=new THREE.Group();g.position.set(x,1.15,z);scene.add(g);const c=new THREE.Mesh(new THREE.TorusGeometry(.3,.085,12,24),coinRim);c.castShadow=true;g.add(c);const center=new THREE.Mesh(new THREE.CylinderGeometry(.19,.19,.055,20),coinCore);center.rotation.x=Math.PI/2;g.add(center);return g}
-function powerup(kind,x,z){const g=new THREE.Group();g.position.set(x,1.35,z);scene.add(g);const color=kind==='magnet'?0x22d3ee:0xa3e635,glow=new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.55,metalness:.28,roughness:.24});const orb=new THREE.Mesh(new THREE.SphereGeometry(.35,18,14),glow);orb.castShadow=true;g.add(orb);const ring=new THREE.Mesh(new THREE.TorusGeometry(.49,.065,10,24),glow);ring.rotation.x=Math.PI/2;g.add(ring);const spark=new THREE.Mesh(new THREE.OctahedronGeometry(.13,0),new THREE.MeshBasicMaterial({color:0xffffff}));spark.position.y=.48;g.add(spark);return g}
+function powerup(kind,x,z){const g=new THREE.Group();g.position.set(x,1.35,z);scene.add(g);const color=kind==='magnet'?0x22d3ee:kind==='shoes'?0xc084fc:0xfb923c,glow=new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.62,metalness:.28,roughness:.24});if(kind==='shoes'){const shoeBody=new THREE.Mesh(new THREE.BoxGeometry(.38,.2,.52),glow);shoeBody.position.y=-.06;shoeBody.castShadow=true;g.add(shoeBody);const toe=new THREE.Mesh(new THREE.SphereGeometry(.17,14,10),glow);toe.scale.set(1,.65,1.2);toe.position.set(0,-.07,.22);g.add(toe)}else if(kind==='rocket'){const body=new THREE.Mesh(new THREE.CylinderGeometry(.13,.18,.5,14),glow);body.position.y=-.02;body.castShadow=true;g.add(body);const nose=new THREE.Mesh(new THREE.ConeGeometry(.14,.2,14),glow);nose.position.y=.33;g.add(nose);const flame=new THREE.Mesh(new THREE.ConeGeometry(.11,.25,12),new THREE.MeshBasicMaterial({color:0xffd166}));flame.rotation.x=Math.PI;flame.position.y=-.38;g.add(flame)}else{const orb=new THREE.Mesh(new THREE.SphereGeometry(.35,18,14),glow);orb.castShadow=true;g.add(orb)}const ring=new THREE.Mesh(new THREE.TorusGeometry(.49,.065,10,24),glow);ring.rotation.x=Math.PI/2;g.add(ring);const spark=new THREE.Mesh(new THREE.OctahedronGeometry(.13,0),new THREE.MeshBasicMaterial({color:0xffffff}));spark.position.y=.48;g.add(spark);return g}
 function trainCar(x,z){
   const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);
   box(g,2.12,3.05,11.8,trainPaint,0,1.42,0);
@@ -114,42 +115,43 @@ function trainCar(x,z){
   for(const xx of [-1.1,1.1])for(const zz of [-4.6,0,4.6]){const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.28,.28,.13,14),rubber);wheel.rotation.z=Math.PI/2;wheel.position.set(xx,.3,zz);wheel.castShadow=true;g.add(wheel)}
   box(g,1.82,.15,.3,darkMetal,0,.35,6.08);return g;
 }
-let savedBest=0;try{savedBest=Number(localStorage.getItem('metroRushBest')||localStorage.getItem('metroDashBest')||0)}catch{}let active=[],running=false,last=0,score=0,coins=0,best=savedBest,speed=13,spawn=0,lane=1,playerX=0,jumpY=0,jumpV=0,slideTime=0,runTime=0,magnetTime=0,jetpackTime=0;bestEl.textContent=best;const laneX=[-2.5,0,2.5];
+let savedBest=0;try{savedBest=Number(localStorage.getItem('metroRushBest')||localStorage.getItem('metroDashBest')||0)}catch{}let active=[],running=false,last=0,score=0,coins=0,best=savedBest,speed=11,spawn=0,lane=1,playerX=0,jumpY=0,jumpV=0,slideTime=0,runTime=0,magnetTime=0,rocketTime=0,shoeTime=0;bestEl.textContent=best;const laneX=[-2.5,0,2.5];
 function disposeObject(o){scene.remove(o.mesh);o.mesh.traverse(n=>{if(n.geometry)n.geometry.dispose()})}
 function clearObjects(){for(const o of active)disposeObject(o);active=[]}
-function reset(){clearObjects();score=0;coins=0;speed=13;spawn=.6;lane=1;playerX=0;jumpY=0;jumpV=0;slideTime=0;runTime=0;magnetTime=0;jetpackTime=0;scoreEl.textContent='0';coinsEl.textContent='0';bestEl.textContent=best;boostStatus.textContent='🧲 MAGNET · 🚀 JETPACK — मार्गात मिळवा';boostStatus.classList.remove('active');runner.position.set(0,0,0);runner.scale.y=1;message.textContent='Metro Rush';sub.textContent='तीन tracks वर धावा, trains चुकवा, नाणी गोळा करा आणि power-ups वापरा!';startBtn.textContent='खेळ सुरू करा  →'}
+function reset(){clearObjects();score=0;coins=0;speed=11;spawn=.7;lane=1;playerX=0;jumpY=0;jumpV=0;slideTime=0;runTime=0;magnetTime=0;rocketTime=0;shoeTime=0;scoreEl.textContent='0';coinsEl.textContent='0';bestEl.textContent=best;boostStatus.textContent='🧲 MAGNET · 👟 JUMP SHOES · 🚀 ROCKET';boostStatus.classList.remove('active');runner.position.set(0,0,0);runner.scale.y=1;message.textContent='Metro Rush';sub.textContent='तीन tracks वर धावा, trains चुकवा, नाणी गोळा करा आणि power-ups वापरा!';startBtn.textContent='खेळ सुरू करा  →'}
 function start(){reset();running=true;overlay.classList.add('hidden');last=performance.now();requestAnimationFrame(loop)}
 function end(){running=false;const finalScore=Math.floor(score);if(finalScore>best){best=finalScore;bestEl.textContent=best;try{localStorage.setItem('metroRushBest',String(best))}catch{}}message.textContent='गेम संपला!';sub.textContent=`स्कोअर: ${finalScore}  ·  नाणी: ${coins}  ·  सर्वोत्तम: ${best}`;startBtn.textContent='पुन्हा खेळा  ↻';overlay.classList.remove('hidden')}
-function action(a){if(!running)return;if(a==='left')lane=Math.max(0,lane-1);if(a==='right')lane=Math.min(2,lane+1);if(a==='jump'&&jumpY<=.01&&slideTime<=0)jumpV=9.1;if(a==='slide'&&jumpY<.2)slideTime=.72}
+function action(a){if(!running)return;if(a==='left')lane=Math.max(0,lane-1);if(a==='right')lane=Math.min(2,lane+1);if(a==='jump'&&jumpY<=.01&&slideTime<=0)jumpV=shoeTime>0?12.2:9.1;if(a==='slide'&&jumpY<.2)slideTime=.72}
 document.querySelectorAll('[data-action]').forEach(b=>b.addEventListener('pointerdown',e=>{e.preventDefault();action(b.dataset.action)}));startBtn.addEventListener('click',start);
 addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' ','a','d','s','w'].includes(e.key))e.preventDefault();if(e.key==='ArrowLeft'||e.key==='a')action('left');if(e.key==='ArrowRight'||e.key==='d')action('right');if(e.key==='ArrowUp'||e.key===' '||e.key==='w')action('jump');if(e.key==='ArrowDown'||e.key==='s')action('slide')});
 let touch=null;canvas.addEventListener('pointerdown',e=>touch=[e.clientX,e.clientY]);canvas.addEventListener('pointerup',e=>{if(!touch)return;const dx=e.clientX-touch[0],dy=e.clientY-touch[1];if(Math.max(Math.abs(dx),Math.abs(dy))>22)action(Math.abs(dx)>Math.abs(dy)?(dx<0?'left':'right'):(dy<0?'jump':'slide'));touch=null});
-function addObject(){const l=Math.floor(Math.random()*3),kind=Math.random();if(kind<.22){const count=5+Math.floor(Math.random()*3);for(let i=0;i<count;i++){const mesh=coin(laneX[l],-58-i*2.1);active.push({mesh,type:'coin',lane:l,hit:false,baseY:mesh.position.y})}return}if(kind<.28){const type=Math.random()<.55?'magnet':'jetpack',mesh=powerup(type,laneX[l],-58);active.push({mesh,type,lane:l,hit:false,baseY:mesh.position.y});return}let mesh,type;if(kind<.52){mesh=crate(laneX[l],-58);type='low'}else if(kind<.76){mesh=barrier(laneX[l],-58);type='high'}else{mesh=trainCar(laneX[l],-58);type='train'}active.push({mesh,type,lane:l,hit:false,baseY:mesh.position.y})}
+function addObject(){const l=Math.floor(Math.random()*3),kind=Math.random();if(kind<.22){const count=6+Math.floor(Math.random()*2);for(let i=0;i<count;i++){const mesh=coin(laneX[l],-58-i*2.1),height=1.15+Math.sin(i/(count-1)*Math.PI)*1.25;mesh.position.y=height;active.push({mesh,type:'coin',lane:l,hit:false,baseY:height})}return}if(kind<.34){const options=['magnet','shoes','rocket'],type=options[Math.floor(Math.random()*options.length)],mesh=powerup(type,laneX[l],-58);active.push({mesh,type,lane:l,hit:false,baseY:mesh.position.y});return}let mesh,type;if(kind<.56){mesh=crate(laneX[l],-58);type='low'}else if(kind<.78){mesh=barrier(laneX[l],-58);type='high'}else{mesh=trainCar(laneX[l],-58);type='train'}active.push({mesh,type,lane:l,hit:false,baseY:mesh.position.y})}
 function loop(now){if(!running)return;const dt=Math.min((now-last)/1000,.04);last=now;update(dt,now);render();requestAnimationFrame(loop)}
 function update(dt,now){
-  score+=dt*10;speed=Math.min(24,13+score*.012);runTime+=dt*speed*.72;spawn+=dt;
-  if(spawn>Math.max(.58,1.12-score/2300)){spawn=0;addObject()}
-  playerX+=(laneX[lane]-playerX)*(1-Math.exp(-13*dt));
+  score+=dt*10;speed=Math.min(20,11+score*.008);runTime+=dt*speed*.72;spawn+=dt;
+  if(spawn>Math.max(1,1.6-score/6000)){spawn=0;addObject()}
+  playerX+=(laneX[lane]-playerX)*(1-Math.exp(-16*dt));
   if(jumpV!==0||jumpY>0){jumpV-=22*dt;jumpY+=jumpV*dt;if(jumpY<0){jumpY=0;jumpV=0}}
-  slideTime=Math.max(0,slideTime-dt);magnetTime=Math.max(0,magnetTime-dt);jetpackTime=Math.max(0,jetpackTime-dt);
-  runner.position.x=playerX;runner.position.y=jetpackTime>0?2.8+Math.sin(runTime*5)*.13:jumpY;runner.scale.y=slideTime>0?.61:1;
+  slideTime=Math.max(0,slideTime-dt);magnetTime=Math.max(0,magnetTime-dt);rocketTime=Math.max(0,rocketTime-dt);shoeTime=Math.max(0,shoeTime-dt);
+  runner.position.x=playerX;runner.position.y=rocketTime>0?2.8+Math.sin(runTime*5)*.13:jumpY;runner.scale.y=slideTime>0?.61:1;
   const stride=Math.sin(runTime)*.72;legs[0].pivot.rotation.x=stride+(slideTime>0?-.25:0);legs[1].pivot.rotation.x=-stride+(slideTime>0?-.25:0);arms[0].pivot.rotation.x=-stride*.72;arms[1].pivot.rotation.x=stride*.72;torso.rotation.z=(laneX[lane]-playerX)*-.035;
-  if(jetpackTime<=0&&jumpY===0)runner.position.y+=Math.abs(Math.sin(runTime*2))*.035;
-  const boosts=[];if(magnetTime>0)boosts.push(`🧲 MAGNET ${Math.ceil(magnetTime)}s`);if(jetpackTime>0)boosts.push(`🚀 JETPACK ${Math.ceil(jetpackTime)}s`);
-  boostStatus.textContent=boosts.length?boosts.join('  ·  '):'🧲 MAGNET · 🚀 JETPACK — मार्गात मिळवा';boostStatus.classList.toggle('active',boosts.length>0);
+  if(rocketTime<=0&&jumpY===0)runner.position.y+=Math.abs(Math.sin(runTime*2))*.035;
+  const boosts=[];if(magnetTime>0)boosts.push(`🧲 MAGNET ${Math.ceil(magnetTime)}s`);if(shoeTime>0)boosts.push(`👟 JUMP SHOES ${Math.ceil(shoeTime)}s`);if(rocketTime>0)boosts.push(`🚀 ROCKET ${Math.ceil(rocketTime)}s`);
+  boostStatus.textContent=boosts.length?boosts.join('  ·  '):'🧲 MAGNET · 👟 JUMP SHOES · 🚀 ROCKET';boostStatus.classList.toggle('active',boosts.length>0);
   sleepers.forEach(s=>{s.position.z+=speed*dt;if(s.position.z>15)s.position.z-=140});cityBlocks.forEach(g=>{g.position.z+=speed*dt;if(g.position.z>14)g.position.z-=129});gantries.forEach(g=>{g.position.z+=speed*dt;if(g.position.z>14)g.position.z-=144});lamps.forEach(g=>{g.position.z+=speed*dt;if(g.position.z>14)g.position.z-=135});
   for(const o of active){
     o.mesh.position.z+=speed*dt;
     if(o.type==='coin'){
       o.mesh.rotation.y+=dt*2.8;o.mesh.position.y=o.baseY+Math.sin(now*.004+o.lane)*.12;
       if(magnetTime>0&&o.mesh.position.z>-24&&o.mesh.position.z<3)o.mesh.position.x+=(playerX-o.mesh.position.x)*Math.min(1,dt*5.5);
-    }else if(o.type==='magnet'||o.type==='jetpack'){o.mesh.rotation.y+=dt*2.1;o.mesh.position.y=o.baseY+Math.sin(now*.003+o.lane)*.18}
+    }else if(o.type==='magnet'||o.type==='shoes'||o.type==='rocket'){o.mesh.rotation.y+=dt*2.1;o.mesh.position.y=o.baseY+Math.sin(now*.003+o.lane)*.18}
     const inLane=o.type==='coin'?Math.abs(playerX-o.mesh.position.x)<1.05:Math.abs(playerX-laneX[o.lane])<1.05;
     const nearPlayer=o.type==='train'?o.mesh.position.z>-7&&o.mesh.position.z<7:o.mesh.position.z>-.9&&o.mesh.position.z<1.1;
-    if(!o.hit&&inLane&&nearPlayer){
+    const coinHeightOk=o.type!=='coin'||rocketTime>0||Math.abs(o.mesh.position.y-(jumpY+1.15))<.95;
+    if(!o.hit&&inLane&&nearPlayer&&coinHeightOk){
       if(o.type==='coin'){o.hit=true;coins++;score+=35;coinsEl.textContent=coins;coinBox.classList.remove('bump');void coinBox.offsetWidth;coinBox.classList.add('bump')}
-      else if(o.type==='magnet'||o.type==='jetpack'){o.hit=true;if(o.type==='magnet')magnetTime=10;else jetpackTime=7;score+=100}
-      else if(jetpackTime>0){o.hit=true}
+      else if(o.type==='magnet'||o.type==='shoes'||o.type==='rocket'){o.hit=true;if(o.type==='magnet')magnetTime=10;else if(o.type==='shoes')shoeTime=12;else rocketTime=7;score+=100}
+      else if(rocketTime>0){o.hit=true}
       else if(o.type==='low'&&jumpY<.95&&slideTime<=0){end();return}
       else if(o.type==='high'&&slideTime<=0){end();return}
       else if(o.type==='high'&&slideTime>0){o.hit=true}

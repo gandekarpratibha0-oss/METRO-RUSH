@@ -176,7 +176,9 @@ CEO game loop समजून controls वापरून पाहू शकत
 - 3D scene, trackside शहर, lighting/shadows आणि धावणारा animated character.
 - Keyboard, swipe आणि on-screen controls.
 - Smooth lane change, jump, slide, train/crate/barrier obstacles, coin rows आणि score.
-- Magnet coins जवळ ओढतो; jetpack काही सेकंद runner ला obstacles वरून उडवतो.
+- Magnet coins जवळ ओढतो; jump shoes उडी वाढवतात; rocket काही सेकंद runner ला obstacles वरून उडवतो.
+- हवेतल्या coin rows उडी मारून गोळा करता येतात; mobile वर swipe controls वापरले जातात.
+- सुरुवातीचा वेग आणि obstacle मधील अंतर reaction window वाढवण्यासाठी समायोजित केले आहे.
 - Start, game-over, restart आणि browser मध्ये सर्वोत्तम score जतन करणे.
 - दुसऱ्या device वर trusted local network द्वारे demo चालवण्याची ऐच्छिक पद्धत `README.md` मध्ये दिली आहे.
 

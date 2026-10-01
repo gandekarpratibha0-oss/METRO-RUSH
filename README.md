@@ -1,13 +1,13 @@
 # Metro Rush
 
-Metro Rush हा Subway Surfers प्रकारच्या endless-runner gameplay ने प्रेरित, स्वतःची पात्रे आणि visuals असलेला मराठी 3D browser game आहे. यात तीन lanes, धावत्या trains, crates, overhead barriers, coin rows, magnet आणि jetpack power-ups, score, collision, game-over आणि restart आहेत.
+Metro Rush हा Subway Surfers प्रकारच्या endless-runner gameplay ने प्रेरित, स्वतःची पात्रे आणि visuals असलेला मराठी 3D browser game आहे. यात तीन lanes, धावत्या trains, crates, overhead barriers, उड्या मारून गोळा करता येणाऱ्या coin rows, magnet, jump shoes आणि rocket boosts, score, collision, game-over आणि restart आहेत. Mobile वर swipe controls वापरा; on-screen action buttons desktop साठी आहेत.
 
 ## चालवण्याची पद्धत
 
 1. या folder मध्ये Node.js उपलब्ध असलेल्या संगणकावर terminal उघडा.
 2. `node server.js` चालवा.
 3. त्याच संगणकावर `http://127.0.0.1:8765` उघडा.
-4. “खेळ सुरू करा” दाबा. Magnet coins जवळ ओढतो; Jetpack काही सेकंद obstacles वरून उडवतो.
+4. “खेळ सुरू करा” दाबा. Magnet coins जवळ ओढतो; jump shoes उडी वाढवतात; rocket काही सेकंद obstacles वरून उडवतो.
 
 Three.js browser मध्ये jsDelivr वरून लोड होते, त्यामुळे पहिल्या वेळी इंटरनेट जोडणी आवश्यक आहे.
 
