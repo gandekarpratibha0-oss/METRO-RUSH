@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="mr">
+<html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Metro Rush — 3D Runner</title>
@@ -16,14 +16,14 @@
 </head>
 <body>
 <main class="wrap">
-  <div class="top"><div class="brand"><div class="logo">🚇</div><div><div class="title">METRO RUSH</div><div class="tagline">ENDLESS RUNNER</div></div></div><div class="hud"><div class="scorebox"><div class="score-label">स्कोअर</div><div class="score"><span id="score">0</span></div></div><div class="scorebox coinbox" id="coinbox"><div class="score-label">🪙 COINS</div><div class="score coin-value"><span id="coins">0</span></div></div><div class="scorebox"><div class="score-label">BEST</div><div class="score best-value"><span id="best">0</span></div></div></div></div>
+  <div class="top"><div class="brand"><div class="logo">🚇</div><div><div class="title">METRO RUSH</div><div class="tagline">ENDLESS RUNNER</div></div></div><div class="hud"><div class="scorebox"><div class="score-label">SCORE</div><div class="score"><span id="score">0</span></div></div><div class="scorebox coinbox" id="coinbox"><div class="score-label">🪙 COINS</div><div class="score coin-value"><span id="coins">0</span></div></div><div class="scorebox"><div class="score-label">BEST</div><div class="score best-value"><span id="best">0</span></div></div></div></div>
   <canvas id="game" width="480" height="720" aria-label="Metro Rush 3D endless runner game"></canvas>
-  <div class="help">← → lane · ↑ / Space उडी · ↓ slide · मोबाईलवर swipe</div>
+  <div class="help">← / → Move · ↑ / Space Jump · ↓ Slide · Swipe on mobile</div>
   <div class="boost-status" id="boostStatus">🧲 MAGNET · 👟 JUMP SHOES · 🚀 ROCKET</div>
-  <div class="buttons"><button data-action="left">←</button><button data-action="jump">↑ &nbsp; उडी</button><button data-action="slide">↓ &nbsp; Slide</button><button data-action="right">→</button></div>
+  <div class="buttons"><button data-action="left">←</button><button data-action="jump">↑ &nbsp; Jump</button><button data-action="slide">↓ &nbsp; Slide</button><button data-action="right">→</button></div>
 </main>
-<div class="overlay" id="overlay"><div class="card"><div style="font-size:42px;margin-bottom:8px">🚇</div><h1 id="message">Metro Rush</h1><p id="sub">तीन tracks वर धावा, trains चुकवा, नाणी गोळा करा आणि power-ups वापरा!</p><button id="start">खेळ सुरू करा &nbsp; →</button></div></div>
-<script>addEventListener('unhandledrejection',()=>{const h=document.querySelector('#message'),p=document.querySelector('#sub'),b=document.querySelector('#start');if(h&&p&&b){h.textContent='3D scene लोड झाली नाही';p.textContent='इंटरनेट जोडणी तपासा आणि पेज पुन्हा उघडा.';b.disabled=true;b.style.opacity='.5'}})</script>
+<div class="overlay" id="overlay"><div class="card"><div style="font-size:42px;margin-bottom:8px">🚇</div><h1 id="message">Metro Rush</h1><p id="sub">Run across three tracks, dodge trains, collect coins, and use power-ups!</p><button id="start">Start Running &nbsp; →</button></div></div>
+<script>addEventListener('unhandledrejection',()=>{const h=document.querySelector('#message'),p=document.querySelector('#sub'),b=document.querySelector('#start');if(h&&p&&b){h.textContent='3D Scene Failed to Load';p.textContent='Check your internet connection and reload the page.';b.disabled=true;b.style.opacity='.5'}})</script>
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
 
@@ -119,9 +119,9 @@ function trainCar(x,z){
 let savedBest=0;try{savedBest=Number(localStorage.getItem('metroRushBest')||localStorage.getItem('metroDashBest')||0)}catch{}let active=[],running=false,last=0,score=0,coins=0,best=savedBest,speed=11,spawn=0,lane=1,playerX=0,jumpY=0,jumpV=0,slideTime=0,runTime=0,magnetTime=0,rocketTime=0,shoeTime=0;bestEl.textContent=best;const laneX=[-2.5,0,2.5];
 function disposeObject(o){scene.remove(o.mesh);o.mesh.traverse(n=>{if(n.geometry)n.geometry.dispose()})}
 function clearObjects(){for(const o of active)disposeObject(o);active=[]}
-function reset(){clearObjects();score=0;coins=0;speed=11;spawn=.7;lane=1;playerX=0;jumpY=0;jumpV=0;slideTime=0;runTime=0;magnetTime=0;rocketTime=0;shoeTime=0;scoreEl.textContent='0';coinsEl.textContent='0';bestEl.textContent=best;boostStatus.textContent='🧲 MAGNET · 👟 JUMP SHOES · 🚀 ROCKET';boostStatus.classList.remove('active');runner.position.set(0,0,0);runner.scale.y=1;message.textContent='Metro Rush';sub.textContent='तीन tracks वर धावा, trains चुकवा, नाणी गोळा करा आणि power-ups वापरा!';startBtn.textContent='खेळ सुरू करा  →'}
+function reset(){clearObjects();score=0;coins=0;speed=11;spawn=.7;lane=1;playerX=0;jumpY=0;jumpV=0;slideTime=0;runTime=0;magnetTime=0;rocketTime=0;shoeTime=0;scoreEl.textContent='0';coinsEl.textContent='0';bestEl.textContent=best;boostStatus.textContent='🧲 MAGNET · 👟 JUMP SHOES · 🚀 ROCKET';boostStatus.classList.remove('active');runner.position.set(0,0,0);runner.scale.y=1;message.textContent='Metro Rush';sub.textContent='Run across three tracks, dodge trains, collect coins, and use power-ups!';startBtn.textContent='Start Running  →'}
 function start(){reset();running=true;overlay.classList.add('hidden');last=performance.now();requestAnimationFrame(loop)}
-function end(){running=false;const finalScore=Math.floor(score);if(finalScore>best){best=finalScore;bestEl.textContent=best;try{localStorage.setItem('metroRushBest',String(best))}catch{}}message.textContent='गेम संपला!';sub.textContent=`स्कोअर: ${finalScore}  ·  नाणी: ${coins}  ·  सर्वोत्तम: ${best}`;startBtn.textContent='पुन्हा खेळा  ↻';overlay.classList.remove('hidden')}
+function end(){running=false;const finalScore=Math.floor(score);if(finalScore>best){best=finalScore;bestEl.textContent=best;try{localStorage.setItem('metroRushBest',String(best))}catch{}}message.textContent='Run Over!';sub.textContent=`Score: ${finalScore}  ·  Coins: ${coins}  ·  Best: ${best}`;startBtn.textContent='Run Again  ↻';overlay.classList.remove('hidden')}
 function action(a){if(!running)return;if(a==='left')lane=Math.max(0,lane-1);if(a==='right')lane=Math.min(2,lane+1);if(a==='jump'&&jumpY<=.01&&slideTime<=0)jumpV=shoeTime>0?12.2:9.1;if(a==='slide'&&jumpY<.2)slideTime=.72}
 document.querySelectorAll('[data-action]').forEach(b=>b.addEventListener('pointerdown',e=>{e.preventDefault();action(b.dataset.action)}));startBtn.addEventListener('click',start);
 addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' ','a','d','s','w'].includes(e.key))e.preventDefault();if(e.key==='ArrowLeft'||e.key==='a')action('left');if(e.key==='ArrowRight'||e.key==='d')action('right');if(e.key==='ArrowUp'||e.key===' '||e.key==='w')action('jump');if(e.key==='ArrowDown'||e.key==='s')action('slide')});

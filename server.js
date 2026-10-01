@@ -37,5 +37,5 @@ const server = http.createServer((request, response) => {
 
 server.listen(port, host, () => {
   const displayHost = host === '0.0.0.0' ? '<computer-local-IP>' : host;
-  console.log(`Metro Dash ready at http://${displayHost}:${port}`);
+  console.log(`Metro Rush ready at http://${displayHost}:${port}`);
 });
